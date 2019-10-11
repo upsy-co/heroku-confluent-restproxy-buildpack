@@ -1,6 +1,6 @@
 Forked from https://github.com/heroku/heroku-confluent-buildpack
 
-# Heroku Confluent Buildpack
+# Heroku Confluent REST Proxy Buildpack
 
 Installs the [Confluent](https://confluent.io) distribution on
 Heroku. While you won't be able to run ZooKeeper or Kafka on it, you
