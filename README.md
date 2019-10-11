@@ -28,7 +28,7 @@ CONFLUENT_VERSION: 1.0.1
 A `bin/run-confluent-restproxy` script will be created which will perform the following
 steps:
 
-* Will generate a `confluent.properties` file from the `CONFLUENT_PROPERTIES` environment variable, whose value must be JSON.
+* Will generate a `confluent.properties` file from the `CONFLUENT_PROPERTIES` environment variable. This variable must be a base64-encoded version of what you want the properties file to actually contain.
 
 * It will setup a trap to run `bin/kafka-rest-stop` on
   SIGINT, or SIGTERM.
