@@ -37,27 +37,20 @@ cp -a confluent-${CONFLUENT_VERSION}/* $BUILD_DIR/
 
 echo "Copied Confluent ${CONFLUENT_VERSION} successfully" | indent
 
-CONFLUENT_COMPONENT=$(cat ${ENV_DIR}/CONFLUENT_COMPONENT)
+CONFLUENT_PROPERTIES=$(cat ${ENV_DIR}/CONFLUENT_PROPERTIES)
 
-if [[ -z "${CONFLUENT_COMPONENT}" ]]; then
-    echo "CONFLUENT_COMPONENT was not set, so not creating run-confluent script" | indent
-    exit 0
-fi
-
-cat > ${BUILD_DIR}/bin/run-confluent <<EOF
+cat > ${BUILD_DIR}/bin/run-confluent-restproxy <<EOF
 #!/usr/bin/env bash
 
-if [ -x "./properties-generate" ]; then
-    ./properties-generate > confluent.properties
-fi
+(openssl enc -base64 -d <<< ${CONFLUENT_PROPERTIES}) > confluent.properties
 
 sed -i -e "s/%PORT%/\${PORT}/g" confluent.properties
 
-trap "bin/${CONFLUENT_COMPONENT}-stop" SIGINT SIGTERM
+trap "bin/kafka-rest-stop" SIGINT SIGTERM
 
-bin/${CONFLUENT_COMPONENT}-start confluent.properties
+bin/kafka-rest-start confluent.properties
 EOF
 
-chmod a+x ${BUILD_DIR}/bin/run-confluent
+chmod a+x ${BUILD_DIR}/bin/run-confluent-restproxy
 
 exit 0
