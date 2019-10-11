@@ -1,6 +1,4 @@
-# Note: This buildpack is not currently maintained. 
-
-However, that doesn't mean that it won't work, or that we won't take and apply pull requests for those interested in contributing. If you're using this buildpack and would like to become the maintainer, we would be happy to bless your fork as superceding this version, provided you're doing so in good faith. 
+Forked from https://github.com/heroku/heroku-confluent-buildpack
 
 # Heroku Confluent Buildpack
 
@@ -9,14 +7,12 @@ Heroku. While you won't be able to run ZooKeeper or Kafka on it, you
 could in theory run Kafka Rest on it, which is the primary purpose of
 this buildpack.
 
+The original buildpack was modified to support only the REST proxy.
+
 ## Setup
 
 ```bash
-$ heroku create -b https://github.com/heroku/heroku-confluent-buildpack.git
-Creating vast-woodland-9430... done, stack is cedar-14
-Buildpack set. Next release on vast-woodland-9430 will use https://github.com/heroku/heroku-confluent-buildpack.git.
-https://vast-woodland-9430.herokuapp.com/ | https://git.heroku.com/vast-woodland-9430.git
-Git remote heroku added
+$ heroku create -b https://github.com/upsy-co/heroku-confluent-restproxy-buildpack.git
 ```
 
 Now that you have an app, you can download and "install" a version
@@ -29,29 +25,25 @@ Setting config vars and restarting vast-woodland-9430... done, v3
 CONFLUENT_VERSION: 1.0.1
 ```
 
-Setting `CONFLUENT_COMPONENT=(kafka-rest|schema-registry)` will also
-create a `bin/run-confluent` script, which will perform the following
+A `bin/run-confluent-restproxy` script will be created which will perform the following
 steps:
 
-* If you have an executable at the root of your app named
-  `properties-generate`, it will run it, with no arguments, and
-  redirect STDOUT to confluent.properties.
+* Will generate a `confluent.properties` file from the `CONFLUENT_PROPERTIES` environment variable, whose value must be JSON.
 
-* It will setup a trap to run `bin/$CONFLUENT_COMPONENT}-stop` on
+* It will setup a trap to run `bin/kafka-rest-stop` on
   SIGINT, or SIGTERM.
 
 * It will then substitute `%PORT%` for the value of the environment
   variable `$PORT` (this enables static configuration).
 
-* It will then launch `bin/${CONFLUENT_COMPONENT}-start confluent.properties`
+* It will then launch `bin/kafka-rest-start confluent.properties`
 
 This provides ultimate flexibility in generating your properties file
-from the heroku config, or through a static config file which is part
-of your app.
+from the heroku config.
 
 ## Your app's Procfile
 
 ```bash
 $ cat Procfile
-web: bin/run-confluent
+web: bin/run-confluent-restproxy
 ```
