@@ -18,15 +18,14 @@ curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common --st
 # install JDK
 install_java_with_overlay ${BUILD_DIR}
 
-CONFLUENT_VERSION=$(cat ${ENV_DIR}/CONFLUENT_VERSION)
+CONFLUENT_PACKAGE=$(cat ${ENV_DIR}/CONFLUENT_PACKAGE)
 
-if [[ -z "${CONFLUENT_VERSION}" ]]; then
-    echo "CONFLUENT_VERSION was not set. Aborting" | indent
+if [[ -z "${CONFLUENT_PACKAGE}" ]]; then
+    echo "CONFLUENT_PACKAGE was not set. Aborting" | indent
     exit 1
 fi
 
-ARCHIVE_URL=http://packages.confluent.io/archive/5.3/confluent-${CONFLUENT_VERSION}-2.12.tar.gz
-wget -qO - $ARCHIVE_URL | tar -zxf -
+wget -qO - $CONFLUENT_PACKAGE | tar -zxf -
 if ! [ $? ]; then
     echo "FAILED to obtain confluent distribution" | indent
     exit 1
