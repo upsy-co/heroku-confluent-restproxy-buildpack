@@ -20,6 +20,7 @@ install_java_with_overlay ${BUILD_DIR}
 
 CONFLUENT_PACKAGE=$(cat ${ENV_DIR}/CONFLUENT_PACKAGE)
 CONFLUENT_VERSION=$(cat ${ENV_DIR}/CONFLUENT_VERSION)
+PORT=$(cat ${ENV_DIR}/PORT)
 
 if [[ -z "${CONFLUENT_PACKAGE}" ]]; then
     echo "CONFLUENT_PACKAGE was not set. Aborting" | indent
@@ -43,8 +44,7 @@ cat > ${BUILD_DIR}/bin/run-confluent-restproxy <<EOF
 #!/usr/bin/env bash
 
 (openssl enc -base64 -d <<< ${CONFLUENT_PROPERTIES}) > confluent.properties
-
-sed -i -e "s/%PORT%/\${PORT}/g" confluent.properties
+echo "\n${PORT}\n" >> confluent.properties
 
 trap "bin/kafka-rest-stop" SIGINT SIGTERM
 
