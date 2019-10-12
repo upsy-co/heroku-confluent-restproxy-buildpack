@@ -16,19 +16,20 @@ $ heroku create -b https://github.com/upsy-co/heroku-confluent-restproxy-buildpa
 ```
 
 Now that you have an app, you can download and "install" a version
-by setting up `CONFLUENT_VERSION=1.0.1`, and deploying an app that
+by setting both `CONFLUENT_PACKAGE` and `CONFLUENT_VERSION=5.3.1`, and deploying an app that
 makes use of confluent.
 
 ```bash
-$ heroku config:set CONFLUENT_VERSION=1.0.1
-Setting config vars and restarting vast-woodland-9430... done, v3
-CONFLUENT_VERSION: 1.0.1
+$ heroku config:set CONFLUENT_PACKAGE=http://packages.confluent.io/archive/5.3/confluent-5.3.1-2.12.tar.gz
+$ heroku config:set CONFLUENT_VERSION=5.3.1
 ```
+
+Lastly, set the `CONFLUENT_PROPERTIES` environment variable. This should be the contents you want in the confluent properties  file as a base64-encoded string.
 
 A `bin/run-confluent-restproxy` script will be created which will perform the following
 steps:
 
-* Will generate a `confluent.properties` file from the `CONFLUENT_PROPERTIES` environment variable. This variable must be a base64-encoded version of what you want the properties file to actually contain.
+* Will generate a `confluent.properties` file from the `CONFLUENT_PROPERTIES` environment variable.
 
 * It will setup a trap to run `bin/kafka-rest-stop` on
   SIGINT, or SIGTERM.
