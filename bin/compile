@@ -25,6 +25,7 @@ if [[ -z "${CONFLUENT_PACKAGE}" ]]; then
     exit 1
 fi
 
+echo "Getting Confluent package: ${CONFLUENT_PACKAGE}..." | indent
 wget -qO - $CONFLUENT_PACKAGE | tar -zxf -
 if ! [ $? ]; then
     echo "FAILED to obtain confluent distribution" | indent
