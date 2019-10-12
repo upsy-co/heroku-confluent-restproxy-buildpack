@@ -20,7 +20,6 @@ install_java_with_overlay ${BUILD_DIR}
 
 CONFLUENT_PACKAGE=$(cat ${ENV_DIR}/CONFLUENT_PACKAGE)
 CONFLUENT_VERSION=$(cat ${ENV_DIR}/CONFLUENT_VERSION)
-PORT=$(cat ${ENV_DIR}/PORT)
 
 if [[ -z "${CONFLUENT_PACKAGE}" ]]; then
     echo "CONFLUENT_PACKAGE was not set. Aborting" | indent
