@@ -45,6 +45,8 @@ cat > ${BUILD_DIR}/bin/run-confluent-restproxy <<EOF
 (openssl enc -base64 -d <<< ${CONFLUENT_PROPERTIES}) > confluent.properties
 echo "\nport=${PORT}\n" >> confluent.properties
 
+cat confluent.properties
+
 trap "bin/kafka-rest-stop" SIGINT SIGTERM
 
 bin/kafka-rest-start confluent.properties
